@@ -10,7 +10,7 @@ from .models import Chat
 # Create your views here.
 
 
-openai_api_key = ''
+openai_api_key = os.getenv('OPENAI_API_KEY')
 openai.api_key = openai_api_key
 
 def ask_openai(message):
