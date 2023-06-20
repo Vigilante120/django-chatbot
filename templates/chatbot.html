@@ -65,6 +65,25 @@
 
 
 {% block content %}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Login Required</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Please login to access the chatbot</p>
+      </div>
+      <div class="modal-footer text-center">
+        <a href="login" class="btn btn-primary">Login</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="chat-container">
   <div class="card flex-grow-1">
   
@@ -125,6 +144,14 @@
 </div>
 
 <script>
+
+document.addEventListener("DOMContentLoaded", function() {
+                setTimeout(function() {
+                    document.querySelector('#exampleModal').classList.add('show');
+                    document.querySelector('#exampleModal').style.display = "block";
+                    document.querySelector('body').classList.add('modal-open');
+                }, 2000);
+            });
 
 const messagesList = document.querySelector('.messages-list');
 const messageForm = document.querySelector('.message-form');
