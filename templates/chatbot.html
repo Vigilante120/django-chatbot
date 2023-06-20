@@ -79,16 +79,33 @@
       
       <ul class="list-unstyled messages-list">
         
-        <li class="message received">
+
+        {% for chat in chats %}
+          {% if chat.user == request.user %}
+            <li class="message sent">
           <div class="message-text">
             <div class="message-sender">
-              <b>AI Chatbot</b>
+              <b>You</b>
             </div>
             <div class="message-content">
-              Hi {{user.username}}, I am your AI Chatbot, you can ask me anything.
+              {{chat.message}}
             </div>
           </div>
-        </li>
+        </li> 
+
+
+        <li class="message received" id="scroll">
+          <div class="message-text">
+            <div class="message-sender">
+              <b>You</b>
+            </div>
+            <div class="message-content">
+              {{chat.response}}
+            </div>
+          </div>
+        </li> 
+          {% endif %}
+        {% endfor %}
       </ul>
       
     </div>
@@ -133,6 +150,7 @@ messageForm.addEventListener('submit', (event) => {
           </div>
       </div>`;
   messagesList.appendChild(messageItem);
+  
 
   messageInput.value = '';
 
@@ -159,7 +177,7 @@ messageForm.addEventListener('submit', (event) => {
           </div>
       </div>
         `;
-      messagesList.appendChild(messageItem);
+      messagesList.appendChild(messageItem); 
     });
 });
 </script>

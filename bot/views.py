@@ -10,32 +10,36 @@ from .models import Chat
 # Create your views here.
 
 
-openai_api_key = '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'
+openai_api_key = ''
 openai.api_key = openai_api_key
 
 def ask_openai(message):
-    response = openai.Completion.create(
-    model="text-davinci-003",
-    prompt= message,
-    max_tokens = 150,
-    n=1,
-    stop = None,
-    temperature = 0.9
-    )
+    response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": message},
+    ],
+   
+)
 
-    
-    answer = response.choices[0].text.strip()
+
+    for chunk in response:
+        
+        answer = response['choices'][0]['message']['content']
     return answer 
 
 def bot(request):
+    chats = Chat.objects.filter(user=request.user)
+
     if request.method == 'POST':
         message = request.POST.get('message')
         response = ask_openai(message)
-        
+
         chat = Chat(user=request.user, message=message, response=response, created_at=timezone.now())
         chat.save()
         return JsonResponse({'response': response, 'message': message})
-    return render(request, 'chatbot.html')
+    return render(request, 'chatbot.html', {'chats':chats})
 
 def login(request):
     if request.method == 'POST':
