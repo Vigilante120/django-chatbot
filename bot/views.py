@@ -27,7 +27,7 @@ def ask_openai(message):
 
 # Create your views here.
 def bot(request):
-    chats = Chat.objects.filter(user=request.user)
+    chats = Chat.objects.filter(user=request.user.id)
 
     if request.method == 'POST':
         message = request.POST.get('message')
