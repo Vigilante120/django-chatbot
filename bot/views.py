@@ -1,14 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 import openai
-from django.contrib import auth 
-from django.contrib.auth.models import User
 
-from django.utils import timezone
+from django.contrib import auth
+from django.contrib.auth.models import User
 from .models import Chat
 import os
 
-# Create your views here.
+from django.utils import timezone
 
 
 openai_api_key = os.getenv('OPENAI_API_KEY')
@@ -16,22 +15,19 @@ openai.api_key = openai_api_key
 
 def ask_openai(message):
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
+        model = "gpt-3.5-turbo",
         messages=[
-        {"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": message},
-    ],
-   
-)
+            {"role": "system", "content": "You are an helpful assistant."},
+            {"role": "user", "content": message},
+        ]
+    )
+    
+    answer = response.choices[0].message.content.strip()
+    return answer
 
-
-    for chunk in response:
-        
-        answer = response['choices'][0]['message']['content']
-    return answer 
-
+# Create your views here.
 def bot(request):
-    chats = Chat.objects.filter(user=request.user.id)
+    chats = Chat.objects.filter(user=request.user)
 
     if request.method == 'POST':
         message = request.POST.get('message')
@@ -39,8 +35,9 @@ def bot(request):
 
         chat = Chat(user=request.user, message=message, response=response, created_at=timezone.now())
         chat.save()
-        return JsonResponse({'response': response, 'message': message})
-    return render(request, 'chatbot.html', {'chats':chats})
+        return JsonResponse({'message': message, 'response': response})
+    return render(request, 'chatbot.html', {'chats': chats})
+
 
 def login(request):
     if request.method == 'POST':
@@ -51,7 +48,7 @@ def login(request):
             auth.login(request, user)
             return redirect('bot')
         else:
-            error_message = 'username or password not correct'
+            error_message = 'Invalid username or password'
             return render(request, 'login.html', {'error_message': error_message})
     else:
         return render(request, 'login.html')
@@ -70,10 +67,10 @@ def register(request):
                 auth.login(request, user)
                 return redirect('bot')
             except:
-                error_message = 'Error occured while creating user'
+                error_message = 'Error creating account'
                 return render(request, 'register.html', {'error_message': error_message})
         else:
-            error_message = 'password does not match'
+            error_message = 'Password dont match'
             return render(request, 'register.html', {'error_message': error_message})
     return render(request, 'register.html')
 
