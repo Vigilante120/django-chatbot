@@ -78,9 +78,12 @@
       <div class="modal-body">
         <p>Please login to access the chatbot</p>
       </div>
-      <div class="modal-footer text-center">
+      <div class="text-center">
         <a href="login" class="btn btn-primary">Login</a>
+        <br>
+        <small>Don't have an account? <a href="register">Register</a></small>
       </div>
+     
     </div>
   </div>
 </div>
@@ -89,7 +92,7 @@
 <div class="chat-container">
   <div class="card flex-grow-1">
   
-    <div class="card-header bg-primary text-white">Chat</div>
+    <div class="card-header bg-primary text-white">Chatbot</div>
     {% if user.is_authenticated %}
     <div class="card-header bg-primary text-white"> <b> welcome, {{user.username }}</b><a style="color: yellowgreen;" href="logout"> Logout</a></div>
 
@@ -152,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     document.querySelector('#exampleModal').classList.add('show');
                     document.querySelector('#exampleModal').style.display = "block";
                     document.querySelector('body').classList.add('modal-open');
-                }, 2000);
+                }, 4000);
             });
 
 const messagesList = document.querySelector('.messages-list');
@@ -199,7 +202,7 @@ messageForm.addEventListener('submit', (event) => {
       messageItem.innerHTML = `
       <div class="message-text">
           <div class="message-sender">
-            <b>AI Chatbot</b>
+            <b>Chatbot</b>
           </div>
           <div class="message-content">
               ${response}
