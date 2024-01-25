@@ -92,9 +92,9 @@
 <div class="chat-container">
   <div class="card flex-grow-1">
   
-    <div class="card-header bg-primary text-white">Chatbot</div>
+    <div class="card-header bg-primary text-white">AI Assistant</div>
     {% if user.is_authenticated %}
-    <div class="card-header bg-primary text-white"> <b> welcome, {{user.username }}</b><a style="color: yellowgreen;" href="logout"> Logout</a></div>
+    <div class="card-header bg-primary text-white"> <b> Welcome, {{user.username | title}}</b><a style="color: yellowgreen;" href="logout"> Logout</a></div>
 
     {% else %}
     <div class="card-header bg-primary text-white"><a style="color: yellowgreen;" href="login">Login</a> <a style="color: yellowgreen;"  href="register">Register</a></div>
