@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-import openai
+import google.generativeai as genai
 
 from django.contrib import auth
 from django.contrib.auth.models import User
@@ -8,22 +8,21 @@ from .models import Chat
 import os
 
 from django.utils import timezone
+from django.conf import settings
 
-
-openai_api_key = os.getenv('OPENAI_API_KEY')
-openai.api_key = openai_api_key
+gemini_api_key = settings.GEMINI_API_KEY
+genai.configure(api_key=gemini_api_key)
 
 def ask_openai(message):
-    response = openai.ChatCompletion.create(
-        model = "gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "You are an helpful assistant."},
-            {"role": "user", "content": message},
-        ]
-    )
-    
-    answer = response.choices[0].message.content.strip()
-    return answer
+    try:
+        # Use the latest available Gemini Flash model
+        model = genai.GenerativeModel('gemini-2.0-flash')
+        response = model.generate_content(message)
+        answer = response.text.strip()
+        return answer
+    except Exception as e:
+        print(f"Gemini API error: {e}")
+        return "Sorry, I couldn't get a reply from the AI right now."
 
 # Create your views here.
 def bot(request):

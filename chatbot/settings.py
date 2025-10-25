@@ -1,22 +1,20 @@
-import os
 from pathlib import Path
-from dotenv import load_dotenv
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / ".env")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv("SECRET_KEY")
+# NOTE: you asked to keep SECRET_KEY, DEBUG and ALLOWED_HOSTS in settings.py
+# rather than in the .env file. The values below are convenient defaults for
+# local development. Replace them before deploying to production.
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "0").lower() in ["true", "t", "1"]
-
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS").split(" ")
+SECRET_KEY = config("SECRET_KEY", default="REj8fhZCnXFeF2acq81tVs0AzZS-kyE44Plz0aQLN7jObO-Mdb-ijyjMurIonAuDkVY")
+DEBUG = config("DEBUG", default=True, cast=bool)
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="localhost 127.0.0.1 ::1").split()
 
 
 # Application definition
@@ -120,3 +118,5 @@ MEDIA_ROOT = BASE_DIR / "mediafiles"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+GEMINI_API_KEY = config("GEMINI_API_KEY", default="")
